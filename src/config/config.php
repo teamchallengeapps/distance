@@ -19,7 +19,7 @@ return [
             'unit' => 0.000621371,
             'decimals' => 2,
         ],
-        'steps' => [
+        'footsteps' => [
         	'format' => 'steps',
         	'unit' => 1.458151063,
         	'decimals' => 0,
