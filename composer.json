@@ -1,0 +1,24 @@
+{
+    "name": "teamchallengeapps/distance",
+    "description": "PHP Distance (Value Object) Helper",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Team Challenge Apps Limited",
+            "email": "hello@bigteamchallenge.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "TeamChallengeApps\\Distance\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "minimum-stability": "stable"
+}
