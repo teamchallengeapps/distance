@@ -92,7 +92,7 @@ class Distance
         return $this->isZero();
     }
 
-    public function percentageOf(Distance $distance, $overflow = false)
+    public function percentageOf(Distance $distance, $overflow = true)
     {
         $percentage = ( $this->asBase() / $distance->asBase() );
 

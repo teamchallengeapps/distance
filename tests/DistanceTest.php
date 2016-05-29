@@ -137,15 +137,6 @@ class DistanceTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test **/
-    public function it_detects_zero()
-    {
-    	$distance = new Distance(0);
-
-    	$this->assertTrue($distance->isZero());
-		$this->assertTrue($distance->isEmpty());
-    }
-
-    /** @test **/
     public function it_converts_to_unit_value()
     {
     	$distance = new Distance(1000);
@@ -164,6 +155,39 @@ class DistanceTest extends PHPUnit_Framework_TestCase
 	    	$this->assertEquals($distance->asUnit('kilometers'), $km);
 
     	}
+    }
+
+    /** @test **/
+    public function it_calculates_percentages()
+    {
+        $distance = $this->loadConfig(new Distance(250));
+        $total = $this->loadConfig(new Distance(1000));
+
+        $percentage = $distance->percentageOf($total);
+
+        $this->assertEquals($percentage, 25);
+    }
+
+    /** @test **/
+    public function it_overflows_percentages_by_default()
+    {
+        $distance = $this->loadConfig(new Distance(1500));
+        $total = $this->loadConfig(new Distance(1000));
+
+        $percentage = $distance->percentageOf($total);
+
+        $this->assertEquals($percentage, 150);
+    }
+
+    /** @test **/
+    public function it_caps_percentage_at_100()
+    {
+        $distance = $this->loadConfig(new Distance(1500));
+        $total = $this->loadConfig(new Distance(1000));
+
+        $percentage = $distance->percentageOf($total, false);
+
+        $this->assertEquals($percentage, 100);
     }
 
     protected function loadConfig(Distance $distance)
