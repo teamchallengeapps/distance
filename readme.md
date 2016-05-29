@@ -84,7 +84,7 @@ echo $meters->value; // 1000
 
 Each unit has it's own decimal precision, and you can get the rounded format by using the `round` method.
 
-```
+```php
 
 $meters = new Distance(1000.995);
 
@@ -113,7 +113,7 @@ if ($distance->isZero()) {
 
 **Value Comparison**
 
-``php
+```php
 
 $distance = new Distance(10);
 $total = new Distance(100);
@@ -138,7 +138,7 @@ if ($distance->gte($total)) {
 
 **Percentage Of**
 
-``php
+```php
 
 $distance = new Distance(10);
 $total = new Distance(100);
