@@ -223,7 +223,7 @@ class Distance
     {
         $value = new static($this->asBase() - $distance->asBase());
 
-        $this->value = $value->as($this->unit);
+        $this->value = $value->asUnit($this->unit);
 
         return $this;
     }
@@ -232,7 +232,7 @@ class Distance
     {
         $value = new static($this->asBase() + $distance->asBase());
 
-        $this->value = $value->as($this->unit);
+        $this->value = $value->asUnit($this->unit);
 
         return $this;
     }
