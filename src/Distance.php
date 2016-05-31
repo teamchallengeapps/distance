@@ -259,10 +259,7 @@ class Distance
             return $this->value;
         }
 
-        $from = $this->getMeasurement($this->unit);
-        $to = 'meters';
-
-        return ( $this->value * $to * (1 / $from) );
+        return $this->asUnit('meters');
     }
 
     public function asUnit($unit)
