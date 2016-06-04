@@ -56,7 +56,7 @@ class Distance
 
     public function copy()
     {
-        return new static($this->value, $this->unit);
+        return new static($this->value, $this->unit, $this->config);
     }
 
     /* Getters and Setters */
