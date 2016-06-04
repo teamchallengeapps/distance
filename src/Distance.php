@@ -15,39 +15,48 @@ class Distance
 
     /* Constructors */
 
-    public function __construct($value, $unit = 'meters')
+    public function __construct($value, $unit = 'meters', $config = null)
     {
         $this->setDistance($value, $unit);
+
+        if ( ! is_null($config) ) {
+            $this->config = $config;
+        }
     }
 
     public static function make($distance, $unit = 'meters')
     {
-        return new static($distance, $unit);
+        return new static($distance, $unit, $this->config);
     }
 
     public static function fromMeters($distance)
     {
-        return new static($distance, 'meters');
+        return new static($distance, 'meters', $this->config);
     }
 
     public static function fromKilometers($distance)
     {
-        return new static($distance, 'kilometers');
+        return new static($distance, 'kilometers', $this->config);
     }
 
     public static function fromMiles($distance)
     {
-        return new static($distance, 'miles');
+        return new static($distance, 'miles', $this->config);
     }
 
     public static function fromFootsteps($distance)
     {
-        return new static($distance, 'footsteps');
+        return new static($distance, 'footsteps', $this->config);
     }
 
     public static function fromSteps($distance)
     {
         return static::fromFootsteps($distance);
+    }
+
+    public function copy()
+    {
+        return new static($this->value, $this->unit, $this->config);
     }
 
     /* Getters and Setters */
@@ -199,10 +208,14 @@ class Distance
         return $this;
     }
 
-    public function config($key, $fallback = null)
+    public function config($key = null, $fallback = null)
     {
-        if ( is_null($this->config) ) {
+        if (is_null($this->config)) {
             $this->loadConfig();
+        }
+
+        if (is_null($key)) {
+            return $this->config;
         }
 
         return Arr::get($this->config, $key, $fallback);
@@ -221,7 +234,7 @@ class Distance
 
     public function decrement(Distance $distance)
     {
-        $value = new static($this->asBase() - $distance->asBase());
+        $value = new static($this->asBase() - $distance->asBase(), 'meters', $this->config);
 
         $this->value = $value->asUnit($this->unit);
 
@@ -230,7 +243,7 @@ class Distance
 
     public function increment(Distance $distance)
     {
-        $value = new static($this->asBase() + $distance->asBase());
+        $value = new static($this->asBase() + $distance->asBase(), 'meters', $this->config);
 
         $this->value = $value->asUnit($this->unit);
 
@@ -274,7 +287,7 @@ class Distance
     {
         $distance = $this->asUnit($unit);
 
-        return new static($distance, $unit);
+        return new static($distance, $unit, $this->config);
     }
 
     public function toMeters()

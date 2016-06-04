@@ -190,6 +190,29 @@ class DistanceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($percentage, 100);
     }
 
+    /** @test **/
+    public function it_decrements_distance()
+    {
+        $distance = $this->loadConfig(new Distance(1500));
+        $subtract = $this->loadConfig(new Distance(500));
+
+        $distance->decrement($subtract);
+
+        $this->assertEquals($distance->value, 1000);
+    }
+
+    /** @test **/
+    public function it_stays_clean_after_copying()
+    {
+        $distance = $this->loadConfig(new Distance(1500));
+        $subtract = $this->loadConfig(new Distance(500));
+
+        $after = $distance->copy()->decrement($subtract);
+
+        $this->assertEquals($distance->value, 1500);
+        $this->assertEquals($after->value, 1000);
+    }
+
     protected function loadConfig(Distance $distance)
     {
     	$config = include __DIR__.'/../src/config/config.php';
