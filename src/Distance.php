@@ -24,29 +24,29 @@ class Distance
         }
     }
 
-    public static function make($distance, $unit = 'meters')
+    public static function make($distance, $unit = 'meters', $config = null)
     {
-        return new static($distance, $unit, $this->config);
+        return new static($distance, $unit, $config);
     }
 
     public static function fromMeters($distance)
     {
-        return new static($distance, 'meters', $this->config);
+        return new static($distance, 'meters');
     }
 
     public static function fromKilometers($distance)
     {
-        return new static($distance, 'kilometers', $this->config);
+        return new static($distance, 'kilometers');
     }
 
     public static function fromMiles($distance)
     {
-        return new static($distance, 'miles', $this->config);
+        return new static($distance, 'miles');
     }
 
     public static function fromFootsteps($distance)
     {
-        return new static($distance, 'footsteps', $this->config);
+        return new static($distance, 'footsteps');
     }
 
     public static function fromSteps($distance)
@@ -56,7 +56,7 @@ class Distance
 
     public function copy()
     {
-        return new static($this->value, $this->unit, $this->config);
+        return new static($this->value, $this->unit);
     }
 
     /* Getters and Setters */
