@@ -12,3 +12,12 @@ if ( ! function_exists('distance_value') ) {
     }
 }
 
+if ( ! function_exists('distance_get') ) {
+	function distance_get($value, $unit = 'meters', $from = 'meters') {
+		if ( ! $value instanceof Distance ) {
+			$value = new Distance($value, $from);
+		}
+
+		return $value->asUnit($unit);
+	}
+}
