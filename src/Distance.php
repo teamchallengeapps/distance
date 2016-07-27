@@ -3,7 +3,6 @@
 namespace TeamChallengeApps\Distance;
 
 use Illuminate\Support\Arr;
-use App\Exceptions\DistanceException;
 use Exception;
 
 class Distance
@@ -19,7 +18,7 @@ class Distance
     {
         $this->setDistance($value, $unit);
 
-        if ( ! is_null($config) ) {
+        if (!is_null($config)) {
             $this->config = $config;
         }
     }
@@ -103,9 +102,9 @@ class Distance
 
     public function percentageOf(Distance $distance, $overflow = true)
     {
-        $percentage = ( $this->asBase() / $distance->asBase() );
+        $percentage = ($this->asBase() / $distance->asBase());
 
-        if ( $overflow ) {
+        if ($overflow) {
             return round($percentage * 100);
         }
 
@@ -122,27 +121,27 @@ class Distance
 
     public function lt(Distance $distance)
     {
-        return ( $this->asBase() < $distance->asBase() );
+        return  $this->asBase() < $distance->asBase();
     }
 
     public function lte(Distance $distance)
     {
-        return ( $this->asBase() <= $distance->asBase() );
+        return  $this->asBase() <= $distance->asBase();
     }
 
     public function gt(Distance $distance)
     {
-        return ( $this->asBase() > $distance->asBase() );
+        return  $this->asBase() > $distance->asBase();
     }
 
     public function gte(Distance $distance)
     {
-        return ( $this->asBase() >= $distance->asBase() );
+        return  $this->asBase() >= $distance->asBase();
     }
 
     public function isUnit($unit)
     {
-        return ( $this->unit == $unit );
+        return  $this->unit == $unit;
     }
 
     public function isMeters()
@@ -182,7 +181,7 @@ class Distance
 
     public function getDecimals()
     {
-        $key = 'units.' . $this->unit . '.decimals';
+        $key = 'units.'.$this->unit.'.decimals';
 
         return $this->config($key, 2);
     }
@@ -190,12 +189,12 @@ class Distance
     public function getMeasurement($unit = null)
     {
         $unit = $unit ? $unit : $this->unit;
-        $key = 'units.' . $unit . '.unit';
+        $key = 'units.'.$unit.'.unit';
 
         $measurement = $this->config($key);
 
-        if ( ! $measurement ) {
-            throw new Exception('Measurement ' . $unit . ' not found');
+        if (!$measurement) {
+            throw new Exception('Measurement '.$unit.' not found');
         }
 
         return $measurement;
@@ -223,7 +222,7 @@ class Distance
 
     protected function loadConfig()
     {
-        if ( ! function_exists('config') ) {
+        if (!function_exists('config')) {
             throw new Exception('Unable to auto load config');
         }
 
@@ -254,7 +253,7 @@ class Distance
 
     public function toBase()
     {
-        if ( $this->isMeters() ) {
+        if ($this->isMeters()) {
             return $this;
         }
 
@@ -268,7 +267,7 @@ class Distance
 
     public function asBase()
     {
-        if ( $this->isMeters() ) {
+        if ($this->isMeters()) {
             return $this->value;
         }
 
@@ -280,7 +279,7 @@ class Distance
         $from = $this->getMeasurement($this->unit);
         $to = $this->getMeasurement($unit);
 
-        return ( $this->value * $to * (1 / $from) );
+        return  $this->value * $to * (1 / $from);
     }
 
     public function convertTo($unit)
@@ -321,7 +320,7 @@ class Distance
     {
         $units = new DistanceCollection();
 
-        foreach ( $this->units() as $unit ) {
+        foreach ($this->units() as $unit) {
             $units->put($unit, $this->convertTo($unit));
         }
 
@@ -335,7 +334,7 @@ class Distance
 
     public function toRoundedArray()
     {
-        return $this->all()->map(function($unit){
+        return $this->all()->map(function ($unit) {
             return $unit->round();
         });
     }
@@ -359,10 +358,10 @@ class Distance
     {
         if (in_array($property, $this->units())) {
             $unit = $property;
+
             return $this->convertTo($unit)->distance;
         }
-        
-        return null;
-    }
 
+        return;
+    }
 }

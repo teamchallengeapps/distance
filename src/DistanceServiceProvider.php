@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider;
 class DistanceServiceProvider extends ServiceProvider
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function register()
     {
@@ -16,8 +16,6 @@ class DistanceServiceProvider extends ServiceProvider
 
     /**
      * Setup the package config.
-     *
-     * @return void
      */
     protected function setupConfig()
     {
@@ -29,5 +27,4 @@ class DistanceServiceProvider extends ServiceProvider
             $config => config_path('distance.php'),
         ], 'config');
     }
-
 }

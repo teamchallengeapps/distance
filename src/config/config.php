@@ -2,14 +2,14 @@
 
 return [
 
-	'units' => [
+    'units' => [
 
-		'meters' => [
+        'meters' => [
             'suffix' => 'm',
             'unit' => 1.00,
             'decimals' => 2,
         ],
-		'kilometers' => [
+        'kilometers' => [
             'format' => 'km',
             'unit' => 0.001,
             'decimals' => 2,
@@ -20,11 +20,11 @@ return [
             'decimals' => 2,
         ],
         'footsteps' => [
-        	'format' => 'steps',
-        	'unit' => 1.458151063,
-        	'decimals' => 0,
+            'format' => 'steps',
+            'unit' => 1.458151063,
+            'decimals' => 0,
         ],
 
-	],
+    ],
 
 ];
