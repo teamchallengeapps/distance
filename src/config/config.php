@@ -2,6 +2,13 @@
 
 return [
 
+    'format' => [
+
+        'comma' => true,
+        'suffix' => false,
+
+    ],
+
     'units' => [
 
         'meters' => [
@@ -10,17 +17,17 @@ return [
             'decimals' => 2,
         ],
         'kilometers' => [
-            'format' => 'km',
+            'suffix' => 'km',
             'unit' => 0.001,
             'decimals' => 2,
         ],
         'miles' => [
-            'format' => 'mi.',
+            'suffix' => 'mi.',
             'unit' => 0.000621371,
             'decimals' => 2,
         ],
         'footsteps' => [
-            'format' => 'steps',
+            'suffix' => 'steps',
             'unit' => 1.458151063,
             'decimals' => 0,
         ],

@@ -121,6 +121,19 @@ class DistanceTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test **/
+    public function it_formats_to_steps_string_with_suffix()
+    {
+        $meters = 10000;
+
+        $distance = new Distance(10000, 'footsteps');
+        $distance = $this->loadConfig($distance);
+
+        $string = number_format($meters, 0, '.', ',') . ' steps';
+
+        $this->assertEquals($distance->toStringWithSuffix(), $string);
+    }
+
+    /** @test **/
     public function it_allows_global_distance_function()
     {
         $distance = new Distance(1000);

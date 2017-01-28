@@ -186,6 +186,13 @@ class Distance
         return $this->config($key, 2);
     }
 
+    public function getSuffix()
+    {
+        $key = 'units.'.$this->unit.'.suffix';
+
+        return $this->config($key, null);
+    }
+
     public function getMeasurement($unit = null)
     {
         $unit = $unit ? $unit : $this->unit;
@@ -346,7 +353,18 @@ class Distance
 
     public function toString()
     {
-        return (string) number_format($this->value, $this->getDecimals(), '.', ',');
+        $comma = $this->config('format.comma', true) ? ',' : '';
+        $suffix = $this->config('format.suffix', false) ? ' ' . $this->getSuffix() : '';
+
+        return (string) ( number_format($this->value, $this->getDecimals(), '.', $comma) . $suffix );
+    }
+
+    public function toStringWithSuffix()
+    {
+        $comma = $this->config('format.comma', true) ? ',' : '';
+        $suffix = ' ' . $this->getSuffix();
+
+        return (string) ( number_format($this->value, $this->getDecimals(), '.', $comma) . $suffix );
     }
 
     public function __toString()
