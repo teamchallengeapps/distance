@@ -201,9 +201,53 @@ echo $value; // 10,500.59
 
 ```
 
+You can change the default formatting options to include/omit the comma and the unit suffix. Publish the config file using
+
+```
+php artisan vendor:publish --provider="TeamChallengeApps\Distance\DistanceServiceProvider" --tag="config"
+```
+
+```php
+
+return [
+
+    'format' => [
+
+        'comma' => true,
+        'suffix' => false,
+
+    ];
+
+];
+
+```
+
+You can also use the `toStringWithSuffix` method to force the suffix on the end, for example:
+
+```php
+
+$meters = new Distance(100, 'meters');
+echo $meters->toStringWithSuffix(); // 1000 m
+
+$km = new Distance(10.5, 'kilometers');
+echo $km->toStringWithSuffix(); // 1000 km
+
+$miles = new Distance(10, 'miles');
+echo $miles->toStringWithSuffix(); // 1000 mi.
+
+$steps = new Distance(10000, 'footsteps');
+echo $steps->toStringWithSuffix(); // 1000 steps
+
+```
+
+
 ## Contributing
 
 Please submit improvements and fixes :)
+
+## Changelog
+
+Look at the **[CHANGELOG.md](https://github.com/teamchallengeapps/distance/blob/master/CHANGELOG.md)** for this package.
 
 ## Author
 
