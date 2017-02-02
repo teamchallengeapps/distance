@@ -55,9 +55,9 @@ You can convert a distance object to a new unit using the `to` methods.
 
 $meters = new Distance(1000);
 
-$kilometers = $kilometers->toKilometers();
+$km = $meters->toKilometers();
 
-echo $meters->value; // 1
+echo $km->value; // 1
 
 ```
 
