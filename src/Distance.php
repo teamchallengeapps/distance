@@ -323,15 +323,28 @@ class Distance
 
     /* Formatting */
 
-    public function all()
+    public function only(array $units)
     {
-        $units = new DistanceCollection();
+        $distance = new DistanceCollection();
 
-        foreach ($this->units() as $unit) {
-            $units->put($unit, $this->convertTo($unit));
+        foreach ( $this->units() as $unit ) {
+            if ( in_array($unit, $units) ) {
+                $distance->put($unit, $this->convertTo($unit));
+            }
         }
 
-        return $units;
+        return $distance;
+    }
+
+    public function all()
+    {
+        $distance = new DistanceCollection();
+
+        foreach ($this->units() as $unit) {
+            $distance->put($unit, $this->convertTo($unit));
+        }
+
+        return $distance;
     }
 
     public function toArray()
@@ -339,9 +352,11 @@ class Distance
         return $this->all()->toArray();
     }
 
-    public function toRoundedArray()
+    public function toRoundedArray(array $units = null)
     {
-        return $this->all()->map(function ($unit) {
+        $distance = is_null($units) ? $this->all() : $this->only($units);
+
+        return $distance->map(function ($unit) {
             return $unit->round();
         });
     }
