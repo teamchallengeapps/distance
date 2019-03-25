@@ -20,5 +20,12 @@
             "src/helpers.php"
         ]
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TeamChallengeApps\\Distance\\DistanceServiceProvider"
+            ]
+        }
+    },
     "minimum-stability": "stable"
 }
