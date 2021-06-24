@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this packge will be documented in this file.
 
+### Changed
+- Updated to Laravel 6-8 compatibility.
+
 ## [1.1.0] - 2017-01-28
 ### Added
 - Added new `toStringWithSuffix` method and updated config with format (toString) options.
