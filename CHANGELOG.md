@@ -1,6 +1,7 @@
 # Change Log
 All notable changes to this packge will be documented in this file.
 
+## [1.2.0] - 2021-06-24
 ### Changed
 - Updated to Laravel 6-8 compatibility.
 
