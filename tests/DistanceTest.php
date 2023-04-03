@@ -2,8 +2,9 @@
 
 use Illuminate\Support\Collection;
 use TeamChallengeApps\Distance\Distance;
+use PHPUnit\Framework\TestCase;
 
-class DistanceTest extends PHPUnit_Framework_TestCase
+class DistanceTest extends TestCase
 {
     /** @test */
     public function it_creates_distance()

@@ -24,7 +24,7 @@ class DistanceServiceProvider extends ServiceProvider
         $this->mergeConfigFrom($config, 'distance');
 
         $this->publishes([
-            $config => config_path('distance.php'),
+            $config => app()->configPath('distance.php'),
         ], 'config');
     }
 }
