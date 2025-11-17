@@ -1,10 +1,10 @@
 # Distance Helper [![Build Status](https://travis-ci.org/teamchallengeapps/distance.svg?branch=master)](https://travis-ci.org/teamchallengeapps/distance)
 
-## About
+## About
 
-This Distance Helper package contains a tested PHP Value Object which makes working with, comparing, converting and formatting distances (meters, kilometers and steps) easy and fluent.
+This Distance Helper package contains a tested PHP Value Object which makes working with, comparing, converting and formatting distances (inches, centimeters, meters, kilometers, miles and steps) easy and fluent.
 
-The inspriation for the package came from PHP helpers like [Carbon](http://carbon.nesbot.com/), and an effort to refactor the code behind the virtual workplace walking challenge system [Big Team Challenge](https://bigteamchallenge.com).
+The inspiration for the package came from PHP helpers like [Carbon](http://carbon.nesbot.com/), and an effort to refactor the code behind the virtual workplace walking challenge system [Big Team Challenge](https://bigteamchallenge.com).
 
 ## Installation
 
@@ -14,12 +14,10 @@ You can pull in this package through composer
 composer require teamchallengeapps/distance
 ```
 
-The package (particularly configuration) is designed to work with Laravel 5. Include our custom service provider within `config/app.php`:
+The package (particularly configuration) is designed to work with Laravel 10+ using autodiscovery. You can manually add our service provider within the providers array:
 
-```php
-'providers' => [
-    'TeamChallengeApps\Distance\DistanceServiceProvider'
-];
+```
+\TeamChallengeApps\Distance\DistanceServiceProvider::class,
 ```
 
 ## Usage
@@ -28,20 +26,21 @@ To create a new distance you, simply new-up an instance of the Distance class.
 
 ```php
 
-use TeamChallengeApps\Distance\Distance;
+use TeamChallengeApps\Distance\DistanceValue;
+use TeamChallengeApps\Distance\Unit;
 
-$meters = new Distance(100, 'meters');
-$km = new Distance(10.5, 'kilometers');
-$miles = new Distance(10, 'miles');
-$steps = new Distance(10000, 'footsteps');
+$meters = new DistanceValue(100, Unit::Meters);
+$km = new DistanceValue(10.5, Unit::Kilometers);
+$miles = new DistanceValue(10, Unit::Miles);
+$steps = new DistanceValue(10000, Unit::Footsteps);
 
 ```
 
-The default distance is **meters**, so ommitting the second (optional) constructor argument will default to meters
+The default (base) unit is **centimeters**, so ommitting the second (optional) constructor argument will default to meters. This is chosen to be the smallest (integer) measurement in your datastore - similar to storing integer cents rather than decimal dollars for money.
 
 ```php
 
-$meters = new Distance(100);
+$centimeters = new DistanceValue(100);
 
 ```
 
@@ -49,48 +48,31 @@ $meters = new Distance(100);
 
 ### Converting
 
-You can convert a distance object to a new unit using the `to` methods.
+You can convert a distance object to a new unit using the `convertTo` methods.
 
 ```php
+use TeamChallengeApps\Distance\DistanceValue;
+use TeamChallengeApps\Distance\Unit;
 
-$meters = new Distance(1000);
+$centimeters = new DistanceValue(1000, Unit::Centimeters);
+$meters = $meters->toMeters();
 
-$km = $meters->toKilometers();
-
-echo $km->value; // 1
-
+echo $meters->getValue(); // 1
 ```
 
-The following methods are built-in:
-
- - `toMeters()`
- - `toKilometers()`
- - `toMiles()`
- - `toFootsteps()`
- - `toSteps()` (alias)
-
-If you just want to get the conversion, without changing the object, you can use the `asUnit` method.
+If you want to convert to the base unit (`centimeters` by default), you can do:
 
 ```php
-
-$meters = new Distance(1000);
-
-echo $meters->asUnit('kilometers'); // 1
-echo $meters->value; // 1000
-
+$distance->convertToBase();
 ```
 
-### Rounding
+The conversions are stored inside the `distance.conversions` config in the format, e.g:
 
-Each unit has it's own decimal precision, and you can get the rounded format by using the `round` method.
-
-```php
-
-$meters = new Distance(1000.995);
-
-echo $meters->value; // 1000.995
-echo $meters->round(); // 1001.00
-
+```
+'conversions' => [
+    'centimeters:meters' => 0.01,
+    ...
+]
 ```
 
 ### Comparison
@@ -98,12 +80,10 @@ echo $meters->round(); // 1001.00
 **Empty / zero**
 
 ```php
+use TeamChallengeApps\Distance\DistanceValue;
 
-$distance new Distance(0);
-
-if ($distance->isEmpty()) {
-  //
-}
+$distance new DistanceValue(0);
+// or $distance = DistanceValue::zero();
 
 if ($distance->isZero()) {
   
@@ -111,97 +91,150 @@ if ($distance->isZero()) {
 
 ```
 
-**Value Comparison**
+**Positive / negative**
 
 ```php
+use TeamChallengeApps\Distance\DistanceValue;
 
-$distance = new Distance(10);
-$total = new Distance(100);
+$distance new DistanceValue(100);
 
-if ($distance->lt($total)) {
-  // Less than
-}
-
-if ($distance->lte($total)) {
-  // Less than or equal
-}
-
-if ($distance->gt($total)) {
-  // Greater than
-}
-
-if ($distance->gte($total)) {
-  // Greater than or equal
-}
+$distance->isPositive(); // true
+$distance->isNegative(); // false
 
 ```
 
-**Percentage Of**
+
+**Value Comparison**
+
+You can compare two distances, but you will get a `ComparisonException` exception if the units do not match
 
 ```php
+use TeamChallengeApps\Distance\DistanceValue;
 
-$distance = new Distance(10);
-$total = new Distance(100);
+$distance = new DistanceValue(10);
+$total = new DistanceValue(100);
+
+if ($distance->equals($total) ) {
+  // Equal to
+}
+
+if ($distance->lessThan($total) || $distance->lt($total)) {
+  // Less than || alias
+}
+
+if ($distance->lessThanOrEqual($total) || $distance->lte($total)) {
+  // Less than or equal || alias
+}
+
+if ($distance->greaterThan($total) || $distance->gt($total)) {
+  // Greater than || alias
+}
+
+if ($distance->greaterThanOrEqual($total) || $distance->gte($total)) {
+  // Greater than or equal || alias
+}
+```
+
+### Calculations
+
+**Percentage**
+
+```php
+use TeamChallengeApps\Distance\DistanceValue;
+
+$distance = new DistanceValue(10);
+$total = new DistanceValue(100);
 
 $percentage = $distance->percentageOf($total); // 10
 
 ```
 
-By default, the percentage is capped at 100, but passing `false` as the second parameter will always return the real percentage.
+By default, the real percentage returned, but passing `false` as the second parameter will cap at 100.
 
 ```php
+use TeamChallengeApps\Distance\DistanceValue;
 
-$distance = new Distance(150);
-$total = new Distance(100);
+$distance = new DistanceValue(150);
+$total = new DistanceValue(100);
 
-$percentage = $distance->percentageOf($total); // 100
-$percentage = $distance->percentageOf($total, false); // 150
+$percentage = $distance->percentageOf($total); // 150
+$percentage = $distance->percentageOf(distance: $total, overflow: false); // 100
 
 ```
 
-### Modifying 
-
-You can add or subtract distances
+**Add**
 
 ```php
+use TeamChallengeApps\Distance\DistanceValue;
 
-$total = new Distance(1000);
-$logged = new Distance(10);
+$total = new DistanceValue(1000);
+$logged = new DistanceValue(10);
 
-$total->increment($logged); 
+$result = $total->add($logged); 
 
-echo $total->value; // 1010
+echo $result->getValue(); // 1010
 
 ```
 
+**Subtract**
+
 ```php
 
-$total = new Distance(1010);
-$redeemed = new Distance(10);
+$total = new DistanceValue(1010);
+$redeemed = new DistanceValue(10);
 
-$total->decrement($logged); 
+$result = $total->subtract($logged); 
 
-echo $total->value; // 1000
+echo $result->getValue(); // 1000
+
+```
+
+**Multiply**
+
+```php
+use TeamChallengeApps\Distance\DistanceValue;
+
+$value = new DistanceValue(5);
+
+$result = $total->multiply(3); 
+
+echo $result->getValue(); // 15
+
+```
+
+**Divide**
+
+```php
+use TeamChallengeApps\Distance\DistanceValue;
+
+$value = new DistanceValue(15);
+
+$result = $total->divide(3); 
+
+echo $result->getValue(); // 5
 
 ```
 
 ### Formatting
 
-Using PHP's magic `__toString()` method, echo-ing or casting the object itself will round and use the `number_format` function to return a string-representation of the value.
+#### String
+
+Using PHP's magic `__toString()` method, echo-ing or casting the object itself will round and use php-intl's NumberFormatter to render as a string.
 
 ```php
+use TeamChallengeApps\Distance\DistanceValue;
 
-$distance = new Distance(100500.591);
+$distance = new DistanceValue(100500.591);
 
-echo $distance; // 10,500.59
+echo $distance; // 100,500.59 centimeters
 
 $value = (string) $distance;
 
-echo $value; // 10,500.59
+echo $value; // "100,500.59 centimeters"
 
 ```
 
-You can change the default formatting options to include/omit the comma and the unit suffix. Publish the config file using
+You can change the default precision (2) and rounding mode for each unit in the config file:   
 
 ```
 php artisan vendor:publish --provider="TeamChallengeApps\Distance\DistanceServiceProvider" --tag="config"
@@ -211,35 +244,69 @@ php artisan vendor:publish --provider="TeamChallengeApps\Distance\DistanceServic
 
 return [
 
-    'format' => [
-
-        'comma' => true,
-        'suffix' => false,
-
-    ];
+    'formatting' => [
+        'precision' => [
+            'footsteps' => 0,
+            'inches' => 0,
+        ],
+        'translation' => [
+            /* Set if you wish to use Laravel pluralization of unit strings */
+            'choice' => true,
+        ],
+        'round' => [
+            'footsteps' => \TeamChallengeApps\Distance\RoundingMode::CEILING,
+        ],
+    ]
 
 ];
 
 ```
 
-You can also use the `toStringWithSuffix` method to force the suffix on the end, for example:
+You can also pass options each time you use format:
 
 ```php
+use TeamChallengeApps\Distance\DistanceValue;
+use TeamChallengeApps\Distance\Unit;
 
-$meters = new Distance(100, 'meters');
-echo $meters->toStringWithSuffix(); // 1000 m
+$meters = new DistanceValue(1.00005, Unit::Meters);
 
-$km = new Distance(10.5, 'kilometers');
-echo $km->toStringWithSuffix(); // 1000 km
+/** Default - auto converted to centimeters (default display) and rounded to 2 decimal places */
+echo $meters->format(); // 100.01 centimeters
 
-$miles = new Distance(10, 'miles');
-echo $miles->toStringWithSuffix(); // 1000 mi.
+/** Not converted from original unit but still rounded and using singular suffix */
+echo $meters->format(convert: false); // 1 meter
 
-$steps = new Distance(10000, 'footsteps');
-echo $steps->toStringWithSuffix(); // 1000 steps
-
+/** Not converted from original unit but still rounded and using singular translated suffix */
+echo $meters->format(convert: false, options: ['precision' => 4, 'unit' => false]); // 1.0001
 ```
 
+#### Abbreviated
+
+There is also an abbreviated string helper for steps:
+
+```php
+use TeamChallengeApps\Distance\DistanceValue;
+use TeamChallengeApps\Distance\Unit;
+
+$steps = new DistanceValue(124000, Unit::Footsteps);
+echo $steps->formatUsing(formatter: "abbreviated", convert: false); // 124k steps
+```
+
+#### Decimal
+
+```php
+use TeamChallengeApps\Distance\DistanceValue;
+use TeamChallengeApps\Distance\Unit;
+
+$distance = new DistanceValue(100, Unit::Meters);
+echo $distance->formatDecimal(convert: false)); // 100.0
+
+$distance = new DistanceValue(100.56678, Unit::Meters);
+echo $distance->formatDecimal(convert: false)); // 100.57
+
+$distance = new DistanceValue(100.56678, Unit::Meters);
+echo $distance->formatDecimal(convert: false, options: ['precision' => 3])); // 100.567
+```
 
 ## Contributing
 

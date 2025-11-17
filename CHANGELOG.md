@@ -1,8 +1,8 @@
 # Change Log
-All notable changes to this packge will be documented in this file.
+All notable changes to this package will be documented in this file.
 
 ## [1.3.0] - 2023-04-03
-### Changed
+### Changed
 - Dropped Laravel 5 support.
 - Added Laravel 9 and 10 support.
 
@@ -15,5 +15,5 @@ All notable changes to this packge will be documented in this file.
 - Added new `toStringWithSuffix` method and updated config with format (toString) options.
 
 ## [1.0.1] - 2016-07-27
-### Changed
+### Changed
 - Updated code formatting to PSR2.
