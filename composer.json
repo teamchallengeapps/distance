@@ -1,5 +1,7 @@
 {
     "name": "teamchallengeapps/distance",
+    "description": "PHP Distance (Value Object) Helper",
+    "license": "MIT",
     "authors": [
         {
             "name": "David Rushton",
