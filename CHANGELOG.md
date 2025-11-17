@@ -2,6 +2,8 @@
 All notable changes to this package will be documented in this file.
 
 ## [Unreleased]
+
+## [2.0.0] - 2025-11-17
 Major re-factor of package with breaking changes and new flexiblity / functionality.
 See [UPGRADING.md](UPGRADING.md)
 
@@ -33,7 +35,9 @@ See [UPGRADING.md](UPGRADING.md)
 ### Changed
 - Updated code formatting to PSR2.
 
-[Unreleased]: https://github.com/teamchallengeapps/distance/compare/1.x...HEAD
+[Unreleased]: https://github.com/teamchallengeapps/distance/compare/2.0.0...HEAD
+[2.0.0]: https://github.com/teamchallengeapps/distance/compare/1.x...1.2.0
+[1.3.0]: https://github.com/teamchallengeapps/distance/compare/1.2.0...1.3.0
 [1.3.0]: https://github.com/teamchallengeapps/distance/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/teamchallengeapps/distance/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/teamchallengeapps/distance/compare/1.0.1...1.1.0
