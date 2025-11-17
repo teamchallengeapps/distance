@@ -55,7 +55,7 @@ use TeamChallengeApps\Distance\DistanceValue;
 use TeamChallengeApps\Distance\Unit;
 
 $centimeters = new DistanceValue(1000, Unit::Centimeters);
-$meters = $meters->toMeters();
+$meters = $centimeters->convertTo(Unit::Meters);
 
 echo $meters->getValue(); // 1
 ```
