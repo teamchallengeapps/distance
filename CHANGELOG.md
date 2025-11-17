@@ -1,6 +1,21 @@
 # Change Log
 All notable changes to this package will be documented in this file.
 
+## Unreleased
+Major re-factor of package with breaking changes and new flexiblity / functionality.
+See [UPGRADING.md](UPGRADING.md)
+
+### Added
+- Added Unit enum for strongly typed unit arguments.
+- Added new Config singleton class for booting and changing config (e.g. baseUnit).
+
+### Changed
+- Renamed Distance class to DistanceValue.
+- Updated config with new options.
+
+### Removed
+- Removed `distance_value` and `distance_get` global helper functions.
+
 ## [1.3.0] - 2023-04-03
 ### Changed
 - Dropped Laravel 5 support.
