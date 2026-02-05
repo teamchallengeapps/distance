@@ -2,6 +2,8 @@
 All notable changes to this package will be documented in this file.
 
 ## [Unreleased]
+
+## [2.1.0] - 2026-02-05
 - Updated AbbreviatedDistanceFormatter with round and precision options.
 
 ## [2.0.0] - 2025-11-17
@@ -36,7 +38,8 @@ See [UPGRADING.md](UPGRADING.md)
 ### Changed
 - Updated code formatting to PSR2.
 
-[Unreleased]: https://github.com/teamchallengeapps/distance/compare/2.0.0...HEAD
+[Unreleased]: https://github.com/teamchallengeapps/distance/compare/2.1.0...HEAD
+[2.1.0]: https://github.com/teamchallengeapps/distance/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/teamchallengeapps/distance/compare/1.x...2.0.0
 [1.3.0]: https://github.com/teamchallengeapps/distance/compare/1.2.0...1.3.0
 [1.3.0]: https://github.com/teamchallengeapps/distance/compare/1.2.0...1.3.0
