@@ -28,12 +28,14 @@ class DecimalDistanceFormatter implements DistanceFormatter {
                 RoundingMode::DOWN => round($distance->getValue(), $precision, PHP_ROUND_HALF_DOWN),
                 RoundingMode::CEILING, null => ceil($distance->getValue()),
                 RoundingMode::FLOOR => floor($distance->getValue()),
+                default => ceil($distance->getValue()),
             };
         }
 
         return match ( $round ) {
             RoundingMode::UP, null => round($distance->getValue(), $precision, PHP_ROUND_HALF_UP),
             RoundingMode::DOWN => round($distance->getValue(), $precision, PHP_ROUND_HALF_DOWN),
+            default => round($distance->getValue(), $precision, PHP_ROUND_HALF_UP),
         };
     }
 

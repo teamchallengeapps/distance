@@ -5,6 +5,7 @@ namespace TeamChallengeApps\Distance\Formatter;
 use Illuminate\Support\Arr;
 use NumberFormatter;
 use TeamChallengeApps\Distance\DistanceValue;
+use TeamChallengeApps\Distance\RoundingMode;
 use TeamChallengeApps\Distance\Unit;
 
 class AbbreviatedDistanceFormatter implements DistanceFormatter {
@@ -24,8 +25,16 @@ class AbbreviatedDistanceFormatter implements DistanceFormatter {
         $suffixType = Arr::get($options, 'suffix', self::TINY);
         $originalValue = $value = $distance->getValue();
 
-        $this->formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
-        $this->formatter->setAttribute(NumberFormatter::MIN_FRACTION_DIGITS, 0);
+        $precision = Arr::get($options, 'precision', 0);
+        $round = Arr::get($options, 'round', RoundingMode::UP);
+
+        if ( ! is_int($precision) ) {
+            throw new InvalidArgumentException('Invalid argument - precision should be int');
+        }
+
+        if ( ! $round instanceof RoundingMode ) {
+            throw new InvalidArgumentException('Invalid argument - round should be instance of RoundingMode');
+        }
 
         $suffix = '';
 
@@ -35,11 +44,30 @@ class AbbreviatedDistanceFormatter implements DistanceFormatter {
                 $value /= 1000;
             }
             $suffix = !empty($groups[$i]) ? __('distance::number.'.$groups[$i].'_'.match($suffixType) {
-                self::SHORT => self::SHORT,
-                self::TINY => self::TINY,
-                default => self::TINY,
-            }) : '';
+                    self::SHORT => self::SHORT,
+                    self::TINY => self::TINY,
+                    default => self::TINY,
+                }) : '';
         }
+
+        if ( $precision === 0 ) {
+            $value = match ( $round ) {
+                RoundingMode::UP => round($value, $precision, PHP_ROUND_HALF_UP),
+                RoundingMode::DOWN => round($value, $precision, PHP_ROUND_HALF_DOWN),
+                RoundingMode::CEILING, null => ceil($value),
+                RoundingMode::FLOOR => floor($value),
+                default => ceil($value),
+            };
+        } else {
+            $value = match ( $round ) {
+                RoundingMode::UP, null => round($value, $precision, PHP_ROUND_HALF_UP),
+                RoundingMode::DOWN => round($value, $precision, PHP_ROUND_HALF_DOWN),
+                default => round($value, $precision, PHP_ROUND_HALF_UP),
+            };
+        }
+
+        $this->formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, $precision);
+        $this->formatter->setAttribute(NumberFormatter::MIN_FRACTION_DIGITS, 0);
 
         $string = $this->formatter->format($value).$suffix;
 

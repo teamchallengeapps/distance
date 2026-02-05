@@ -2,6 +2,7 @@
 All notable changes to this package will be documented in this file.
 
 ## [Unreleased]
+- Updated AbbreviatedDistanceFormatter with round and precision options.
 
 ## [2.0.0] - 2025-11-17
 Major re-factor of package with breaking changes and new flexiblity / functionality.
