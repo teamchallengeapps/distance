@@ -18,7 +18,7 @@ class DistanceValue implements Wireable {
 
     protected array $equals = [];
 
-    public function __construct(float|int $value, Unit|string $unit = null, array $equals = [])
+    public function __construct(float|int $value, Unit|string|null $unit = null, array $equals = [])
     {
         $this->value = $value;
         $this->setUnit($unit ?? app(Config::class)->getBaseUnit());
@@ -91,12 +91,12 @@ class DistanceValue implements Wireable {
         return Unit::from($unit);
     }
 
-    public static function zero(Unit|string $unit = null): static
+    public static function zero(Unit|string|null $unit = null): static
     {
         return new static(0, $unit);
     }
 
-    public static function make(float|int $value, Unit|string $unit = null, array $equals = []): static
+    public static function make(float|int $value, Unit|string|null $unit = null, array $equals = []): static
     {
         return new static($value, $unit, $equals);
     }
@@ -150,7 +150,7 @@ class DistanceValue implements Wireable {
         return (string) $this->format(convert: false);
     }
 
-    public function toDecimal(int $precision = null): int|float
+    public function toDecimal(?int $precision = null): int|float
     {
         return $this->formatDecimal(convert: false, options: $precision ? ['precision' => $precision] : []);
     }

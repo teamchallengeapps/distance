@@ -2,6 +2,7 @@
 All notable changes to this package will be documented in this file.
 
 ## [Unreleased]
+- Fixed nullable type declarations (implicitly marking parameter as nullable is deprecated).
 
 ## [2.1.0] - 2026-02-05
 - Updated AbbreviatedDistanceFormatter with round and precision options.

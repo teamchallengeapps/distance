@@ -12,8 +12,8 @@ class Config {
     protected array $conversions;
 
     public function __construct(
-        Unit|string $baseUnit = null,
-        Unit|string $displayUnit = null,
+        Unit|string|null $baseUnit = null,
+        Unit|string|null $displayUnit = null,
         array $conversions = [],
     )
     {
