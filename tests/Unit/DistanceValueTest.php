@@ -118,6 +118,20 @@ class DistanceValueTest extends TestCase
     }
 
     /** @test */
+    public function it_treats_a_zero_equal_to_value_as_known()
+    {
+        $distance = new DistanceValue(20, 'meters', ['footsteps' => 0]);
+
+        $this->assertTrue($distance->hasEqualTo('footsteps'));
+        $this->assertEquals(0, $distance->getEqualTo('footsteps'));
+
+        $distance = new DistanceValue(20, 'meters');
+
+        $this->assertFalse($distance->hasEqualTo('footsteps'));
+        $this->assertNull($distance->getEqualTo('footsteps'));
+    }
+
+    /** @test */
     public function it_throws_exception_when_subtracting_different_units()
     {
         $this->expectException(CalculationException::class);
@@ -143,6 +157,20 @@ class DistanceValueTest extends TestCase
                 distance: new DistanceValue(5, 'meters', ['footsteps' => 6]),
                 calculateEquals: false
             ),
+        );
+    }
+
+    /** @test */
+    public function it_subtracts_a_zero_equal_to_value_as_a_real_value()
+    {
+        $this->assertEquals(
+            new DistanceValue(5, 'meters', ['footsteps' => 0]),
+            (new DistanceValue(10, 'meters', ['footsteps' => 0]))->subtract(new DistanceValue(5, 'meters', ['footsteps' => 0])),
+        );
+
+        $this->assertEquals(
+            new DistanceValue(5, 'meters', ['footsteps' => 12]),
+            (new DistanceValue(10, 'meters', ['footsteps' => 12]))->subtract(new DistanceValue(5, 'meters', ['footsteps' => 0])),
         );
     }
 
@@ -176,6 +204,20 @@ class DistanceValueTest extends TestCase
     }
 
     /** @test */
+    public function it_adds_a_zero_equal_to_value_as_a_real_value()
+    {
+        $this->assertEquals(
+            new DistanceValue(15, 'meters', ['footsteps' => 0]),
+            (new DistanceValue(10, 'meters', ['footsteps' => 0]))->add(new DistanceValue(5, 'meters', ['footsteps' => 0])),
+        );
+
+        $this->assertEquals(
+            new DistanceValue(15, 'meters', ['footsteps' => 12]),
+            (new DistanceValue(10, 'meters', ['footsteps' => 12]))->add(new DistanceValue(5, 'meters', ['footsteps' => 0])),
+        );
+    }
+
+    /** @test */
     public function it_can_do_multiplication()
     {
         $this->assertEquals(
@@ -203,6 +245,15 @@ class DistanceValueTest extends TestCase
     }
 
     /** @test */
+    public function it_multiplies_a_zero_equal_to_value_as_a_real_value()
+    {
+        $this->assertEquals(
+            new DistanceValue(15, 'meters', ['footsteps' => 0]),
+            (new DistanceValue(5, 'meters', ['footsteps' => 0]))->multiply(3),
+        );
+    }
+
+    /** @test */
     public function it_can_do_division()
     {
         $this->assertEquals(
@@ -226,6 +277,15 @@ class DistanceValueTest extends TestCase
                 divisor: 3,
                 calculateEquals: false
             )
+        );
+    }
+
+    /** @test */
+    public function it_divides_a_zero_equal_to_value_as_a_real_value()
+    {
+        $this->assertEquals(
+            new DistanceValue(5, 'meters', ['footsteps' => 0]),
+            (new DistanceValue(15, 'meters', ['footsteps' => 0]))->divide(3),
         );
     }
 
